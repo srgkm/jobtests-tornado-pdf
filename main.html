@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Uploader & Previewer</title>
+  <link href="https://transloadit.edgly.net/releases/uppy/v0.22.0/dist/uppy.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css" rel="stylesheet">
+</head>
+<body class="bg-moon-gray near-black sans-serif">
+
+  <header class="bg-black w-100 pa3">
+    <nav class="f6 fw6 ttu tracked tr">
+      {% if user %}
+        <a class="link dim green dib mr2" href="https://www.facebook.com/{{ user['id'] }}/">{{ user['name'] }}</a>
+        <a class="link dim white dib" href="/logout/">Logout</a>
+      {% else %}
+        <a class="link dim white dib" href="/login/">Login with Facebook</a>
+      {% end %}
+    </nav>
+  </header>
+
+  {% if user %}
+
+    <main class="w-100 pa5 ma1">
+
+      <div id="uppy-form" class="tc"></div>
+
+      <div class="pa4" id="files"></div>
+
+    </main>
+
+    <script src="https://transloadit.edgly.net/releases/uppy/v0.22.0/dist/uppy.min.js"></script>
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script>
+
+      // File list
+      function getFiles() {
+        $.ajax({
+          url: '/files/',
+          cache: false,
+          dataType: 'html'
+        }).done(function(resp) {
+          $('#files').html(resp);
+        });
+      }
+      $(document).ready(function() {
+        getFiles();
+      });
+
+      // Uploader
+      var uppy = new Uppy.Core({
+        autoProceed: true,
+        debug: true,
+        restrictions: {
+          maxFileSize: false,
+          maxNumberOfFiles: 10,
+          minNumberOfFiles: 1,
+          allowedFileTypes: ['application/pdf']
+        }
+      });
+      uppy.use(Uppy.FileInput, {
+        target: '#uppy-form', replaceTargetContent: true
+      });
+      uppy.use(Uppy.XHRUpload, {
+        endpoint: '/files/',
+        method: 'post',
+        formData: true,
+        fieldName: 'files[]'
+      });
+      uppy.on('complete', function(result) {
+        console.log('successful files:', result.successful);
+        console.log('failed files:', result.failed);
+        getFiles();
+      });
+      uppy.run();
+
+    </script>
+
+  {% end %}
+
+</body>
+</html>

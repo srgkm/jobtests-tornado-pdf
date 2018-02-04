@@ -1,0 +1,34 @@
+<div class="pa4" id="files">
+  <div class="overflow-auto">
+    <table class="f6 w-100 mw8 center" cellspacing="0">
+      <thead>
+        <tr class="stripe-dark">
+          <th class="fw6 tl pa3 bg-white">User</th>
+          <th class="fw6 tl pa3 bg-white">File</th>
+          <th class="fw6 tl pa3 bg-white w-50">Pages</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for file in files %}
+        <tr class="stripe-dark">
+          <td class="pa3">
+            <span class="green b">{{ file['user_name'] }}</span>
+          </td>
+          <td class="pa3">
+            <a href="{{ file['file'] }}" target="_blank" class="link dim ba pa1">Open File</a>
+          </td>
+          <td class="pa3">
+            {% if file['file_preview_counter'] %}
+              {% for i  in range(file['file_preview_counter']) %}
+                <a href="{{ file['file'] }}.{{ i }}.png" target="_blank">{{ i }}</a>
+              {% end %}
+            {% else %}
+              <span class="red">IN PROGRESS 🤷</span>
+            {% end %}
+          </td>
+        </tr>
+        {% end %}
+      </tbody>
+    </table>
+  </div>
+</div>
