@@ -1,6 +1,5 @@
 import datetime
 import logging
-import json
 import pathlib
 import sqlite3
 import uuid
@@ -8,8 +7,8 @@ import uuid
 import tornado.auth
 import tornado.concurrent
 import tornado.escape
-import tornado.httpserver
 import tornado.gen
+import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
@@ -147,7 +146,7 @@ class FilesHandler(BaseHandler):
                 ok_file_counter += 1
         # TODO: Do we need fire self.flush?
         self.set_header('Content-Type', 'application/json')
-        self.write(json.dumps({'ok_file_counter': ok_file_counter}))
+        self.write(tornado.escape.json_encode({'ok_file_counter': ok_file_counter}))
 
 
 class LoginHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
