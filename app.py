@@ -55,7 +55,7 @@ class DB:
         return self.conn.execute(q, kwargs)
 
     def list_files(self):
-        q = 'SELECT * FROM file ORDER BY created_time DESC;'
+        q = 'SELECT * FROM file ORDER BY created_time ASC;'
         return self.conn.execute(q)
 
 
