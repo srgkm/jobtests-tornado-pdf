@@ -42,9 +42,9 @@ class DB:
         return self.conn.execute(q)
 
     def insert_file(self, **kwargs):
-        names = ', '.join([k for k in kwargs])
+        fields = ', '.join([k for k in kwargs])
         placeholders = ', '.join([':%s' % k for k in kwargs])
-        q = 'INSERT INTO file (%s) VALUES (%s);' % (names, placeholders)
+        q = 'INSERT INTO file (%s) VALUES (%s);' % (fields, placeholders)
         return self.conn.execute(q, kwargs)
 
     def update_file(self, **kwargs):
